@@ -1,0 +1,95 @@
+.landing {
+    background:url('./earth.png');
+    width: 100vw;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.text {
+    font-family: "Kanit", sans-serif;
+    font-weight: 500;
+}
+
+.glass {
+    border-radius: 10px;
+    background-color: transparent;
+    background: rgba(37, 37, 37, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid transparent;
+    transition: all 0.25s ease-in-out;
+}
+
+
+
+.typewriter {
+    position: relative; 
+    width: max-content;
+  }
+
+.typewriter::before,
+.typewriter::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.typewriter::before{
+    background: #131518;
+    animation:
+        type 1.5s steps(53) forwards;
+}
+
+@keyframes type {
+    to {
+        left: 100%;
+    }
+}
+
+@keyframes slide0 {
+    0% { transform: translateX(-100px); 
+        opacity: 0; }
+
+    100% { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes slide1 {
+    0% { transform: translateX(100px); 
+        opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes slide2 {
+    0% { transform: translateY(100px); 
+        opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  
+ 
+  .slide-animate0 {
+    animation: slide0 0.4s ease-in 1s forwards; 
+    animation-iteration-count: 1; 
+    opacity: 0; 
+    animation-delay: 1.8s;
+  }
+
+  .slide-animate1 {
+    animation: slide1 0.4s ease-in 1s forwards; 
+    animation-iteration-count: 1; 
+    opacity: 0; 
+    animation-delay: 2.1s;
+  }
+
+  .slide-animate2 {
+    animation: slide2 0.4s ease-in 1s forwards; 
+    animation-iteration-count: 1; 
+    opacity: 0; 
+    animation-delay: 2.4s;
+  }
+
+  
