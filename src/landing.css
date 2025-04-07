@@ -92,4 +92,33 @@
     animation-delay: 2.4s;
   }
 
+  .scan-container {
+    position: relative;
+
+  }
   
+  .scan-top-image {
+    position: absolute;
+
+    background: url('top-image.jpg') center/cover;
+    animation: scanReveal 8s infinite;
+  }
+  
+  .scan-bottom-image {
+    position: absolute;
+    background: url('bottom-image.jpg') center/cover;
+  }
+  
+  @keyframes scanReveal {
+    0% {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    50% {
+      clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); 
+    }
+
+    100% {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+  }

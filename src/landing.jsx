@@ -1,12 +1,13 @@
 import {React} from 'react';
 import './landing.css'
 
+
 function Landing() {
     return <>
     <div className='landing relative flex justify-center w-full h-dvh gap-4 p-5'>
         <div className='absolute top-[20vh]'>
             <div className=' flex justify-center gap-3 py-6'>
-                <img src="./satelite.svg" alt="" width={42}/>
+            <img src="./satelite.svg" alt="" width={45}/>
                 <h1 className='text text-5xl'>Timber AI </h1>
             </div>
 
@@ -44,18 +45,23 @@ function Landing() {
             </div>
 
             <div className='glass relative w-[400px] h-[57.5vh] slide-animate1 overflow-hidden'>
-                <div className='glass'>
-                <h1 className='absolute top-10 left-22  text-gray-200 text-3xl font-semibold'>Interpretable Visualizations</h1>
-                <p className='absolute top-40 left-5 text-gray-300 font-semibold'> 
-                    </p>
-                </div>
-                <div className="absolute top-35 flex flex-col justify-center items-center w-full gap-4"> 
-                    <img src="./deforestation-img.png" 
-                    className=" rounded-2xl w-[86%]"
-                    alt="" />
-                    <button className="w-[100px] h-[45px] hover:cursor-pointer border- text-xl 
+              
+                <h1 className='absolute top-4 left-22  text-gray-200 text-3xl font-semibold'>Interpretable Visualizations</h1>
+             
+                <div className="absolute justify-center items-center w-full gap-4"> 
+                    
+                    <div className='scan-container absolute top-30 left-7'>
+                        <img src="/landing_mask.png" 
+                            className="scan-bottom-image rounded-2xl w-[86%]"
+                            alt="" />
+                        <img src="/landing_img.png" 
+                        className="scan-top-image rounded-2xl w-[86%]"
+                        alt="" />
+                    </div>
+
+                    <button className="absolute top-120 left-42 w-[60px] h-[45px] hover:cursor-pointer border- text-xl 
                     font-light rounded-[10px] hover:text-gray-500 transition-all"> Sign In
-                    </button>
+                    </button>  
                 </div>
 
             </div>  
