@@ -9,12 +9,34 @@ export default function Cardousel(props) {
 
     const settings = {
         dots: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
         infinite: true,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        centerMode: false,
         autoplay: true,
-        autoplaySpeed: 1000,
+        autoplaySpeed: 4000,
+        pauseOnHover: true,
+        adaptiveHeight: true,
+        arrows: true,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    centerMode: false
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    centerMode: false
+                }
+            }
+        ]
       };
 
     const dummyData = [
@@ -38,21 +60,21 @@ export default function Cardousel(props) {
 
 
     return (
-       
-        <Slider {...settings}>
-            <div className="card">
-                
-                {dummyData.map((p, i) => (
-                    <Card
-                        key={i}
-                        scale={1}
-                        img_path={p.img_path}
-                        mask_path={p.mask_path}
-                        orderSwitch={props.orderSwitch}
-                    />
-                ))}
-                
+        <div className="slider-container">
+            <div className="carousel-wrapper">
+                <Slider {...settings}>
+                    {dummyData.map((p, i) => (
+                        <div className="card" key={i}>
+                            <Card
+                                scale={0.9}
+                                img_path={p.img_path}
+                                mask_path={p.mask_path}
+                                orderSwitch={props.orderSwitch}
+                            />
+                        </div>
+                    ))}
+                </Slider>
             </div>
-        </Slider> 
+        </div>
     );
 }
