@@ -57,7 +57,7 @@ export default function EarthAnimation({
     // Nastavi novi timer za avtomatsko rotacijo
     autoRotateTimerRef.current = setTimeout(() => {
       onLocationChange((currentLocationIndex + 1) % locations.length);
-    }, 4000);
+    }, 10000);
 
     return () => {
       if (autoRotateTimerRef.current) {
