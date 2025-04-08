@@ -1,0 +1,17 @@
+
+
+.prevCard {
+    left: 0;
+  }
+  
+  .activeCard {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .nextCard {
+    right: 0;
+  }
+  
+  
+  

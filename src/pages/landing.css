@@ -23,6 +23,16 @@
 }
 
 
+.dimmed {
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  backdrop-filter: blur(2px); 
+}
+
+.login {
+  z-index: 11;
+  opacity: 1;
+}
 
 .typewriter {
     position: relative; 
@@ -99,14 +109,15 @@
   
   .scan-top-image {
     position: absolute;
+  }
 
-    background: url('top-image.jpg') center/cover;
+  .scan-top-image-animate {
     animation: scanReveal 8s infinite;
+    animation-delay: 3.2s;
   }
   
   .scan-bottom-image {
     position: absolute;
-    background: url('bottom-image.jpg') center/cover;
   }
   
   @keyframes scanReveal {

@@ -1,10 +1,38 @@
 import {React} from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './landing.css'
 
 
+
 function Landing() {
+
+    const [dimmed, setDimmed] = useState(false)
+
     return <>
-    <div className='landing relative flex justify-center w-full h-dvh gap-4 p-5'>
+    <div className= 'landing relative flex justify-center w-full h-dvh gap-4 p-5 z-0'>
+
+        <div className={`absolute flex items-center justify-center top-0 left-0 w-screen h-screen z-0 ${dimmed ? 'dimmed' : 'opacity-0'}`}>
+    
+                <div className='glass w-[500px] h-[300px] flex flex-col items-center gap-6 border border-teal-300 bg-black rounded-2xl py-10'>
+                    
+                    <h1 className=' text-gray-200 text-2xl font-semibold'>Sign In</h1>
+                    <input type="text" className="w-[80%] p-2 font-semibold bg-gray-100 text-gray-900 border rounded-md border-none outline-none focus:outline-none focus:ring-0 focus:border-none" placeholder="Username" />
+                    <input type="password" className="w-[80%] p-2 font-semibold bg-gray-100 text-gray-900 border rounded-md border-none outline-none focus:outline-none focus:ring-0 focus:border-none" placeholder="Password" />
+                
+                    
+                    <Link
+                        to='/dashboard'
+                        className="mt-auto w-[50%] py-2 hover:cursor-pointer border- text-xl 
+                    font-light rounded-[10px] hover:text-gray-500 transition-all duration-200 text-center"
+                        >
+                        Sign In
+                    </Link>
+
+                </div>
+           
+        </div>
+
         <div className='absolute top-[20vh]'>
             <div className=' flex justify-center gap-3 py-6'>
             <img src="./satelite.svg" alt="" width={45}/>
@@ -39,7 +67,7 @@ function Landing() {
                     <p className='absolute top-40 left-5 text-gray-300'>
                         Using the latest state-of-the-art <br />
                         deep learning models, we create and store <br />
-                        timestamped digital twins to be used for detecting forest landmass changes in real time.
+                        timestamped digital twins to be used for detecting forest landmass change in real time.
                     </p>
                 </div>
             </div>
@@ -55,12 +83,16 @@ function Landing() {
                             className="scan-bottom-image rounded-2xl w-[86%]"
                             alt="" />
                         <img src="/landing_img.png" 
-                        className="scan-top-image rounded-2xl w-[86%]"
+                        className={`scan-top-image rounded-2xl w-[86%] ${dimmed? '' : 'scan-top-image-animate'}`}
                         alt="" />
                     </div>
 
                     <button className="absolute top-120 left-42 w-[60px] h-[45px] hover:cursor-pointer border- text-xl 
-                    font-light rounded-[10px] hover:text-gray-500 transition-all"> Sign In
+                    font-light rounded-[10px] hover:text-gray-500 transition-all"
+                    onClick={() => {
+                        setDimmed(true)
+                    }}
+                    > Sign In
                     </button>  
                 </div>
 
@@ -68,6 +100,8 @@ function Landing() {
         </div>
         
     </div>
+
+
     </>
 }
 
