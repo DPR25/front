@@ -187,12 +187,14 @@ export default function Earth() {
       </div>
       
       {/* Desna stran - Zemlja */}
-      <div className="w-full md:w-1/2 h-full relative bg-transparent">
-        <EarthAnimation 
-          locations={worldLocations} 
-          currentLocationIndex={currentLocationIndex}
-          onLocationChange={setCurrentLocationIndex}
-        />
+      <div className="w-full md:w-1/2 h-full relative bg-transparent flex items-center justify-center">
+        <div className="w-full h-full flex items-center justify-center">
+          <EarthAnimation 
+            locations={worldLocations} 
+            currentLocationIndex={currentLocationIndex}
+            onLocationChange={setCurrentLocationIndex}
+          />
+        </div>
       </div>
     </div>
   );

@@ -115,11 +115,11 @@ export default function EarthAnimation({
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', background: 'transparent' }}>
+    <div style={{ width: '100%', height: '100%', background: 'transparent', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Globe
         ref={globeRef}
-        width={dimensions.width}
-        height={dimensions.height}
+        width={dimensions.width * 0.8}
+        height={dimensions.height * 0.8}
         globeImageUrl="https://unpkg.com/three-globe@2.24.13/example/img/earth-blue-marble.jpg"
         bumpImageUrl="https://unpkg.com/three-globe@2.24.13/example/img/earth-topology.png"
         atmosphereColor="lightskyblue"
