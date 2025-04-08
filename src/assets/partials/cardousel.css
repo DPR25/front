@@ -119,3 +119,59 @@
   overflow: visible !important;
   z-index: 20;
 }
+
+.location-description {
+  background-color: rgba(26, 29, 33, 0.8);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 24px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(60, 64, 67, 0.5);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.location-description p {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+
+.stats-container {
+  margin-top: 12px;
+}
+
+.stats-container h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.stat-item {
+  background-color: rgba(37, 42, 48, 0.8);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  border: 1px solid rgba(60, 64, 67, 0.3);
+  transition: all 0.2s ease;
+}
+
+.stat-item:hover {
+  background-color: rgba(42, 47, 53, 0.9);
+  transform: translateY(-2px);
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+}
+
+.stat-value {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  font-size: 0.85rem;
+}

@@ -13,11 +13,15 @@ const defaultLocations = [
   { lat: -33.9544, lng: 18.4241, color: 'rgba(43, 255, 184, 0.7)', name: 'Table Mountain', size: 2.1, offset: 0.8 },
 ];
 
-export default function EarthAnimation({ locations = defaultLocations }) {
-  const [currentLocationIndex, setCurrentLocationIndex] = useState(0);
+export default function EarthAnimation({ 
+  locations = defaultLocations,
+  currentLocationIndex = 0,
+  onLocationChange = () => {}
+}) {
   const globeRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const [points, setPoints] = useState(locations);
+  const autoRotateTimerRef = useRef(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -31,9 +35,9 @@ export default function EarthAnimation({ locations = defaultLocations }) {
   // Posodobi točke, ko se spremenijo lokacije
   useEffect(() => {
     setPoints(locations);
-    setCurrentLocationIndex(0);
   }, [locations]);
 
+  // Premakni pogled na trenutno lokacijo, ko se spremeni indeks
   useEffect(() => {
     if (!globeRef.current || locations.length === 0) return;
 
@@ -43,14 +47,24 @@ export default function EarthAnimation({ locations = defaultLocations }) {
       lat: currentLocation.lat,
       lng: currentLocation.lng,
       altitude: 2.5
-    }, 3000);
+    }, 2000);
 
-    const timer = setTimeout(() => {
-      setCurrentLocationIndex(prev => (prev + 1) % locations.length);
+    // Očisti obstoječi timer, če obstaja
+    if (autoRotateTimerRef.current) {
+      clearTimeout(autoRotateTimerRef.current);
+    }
+
+    // Nastavi novi timer za avtomatsko rotacijo
+    autoRotateTimerRef.current = setTimeout(() => {
+      onLocationChange((currentLocationIndex + 1) % locations.length);
     }, 4000);
 
-    return () => clearTimeout(timer);
-  }, [currentLocationIndex, locations]);
+    return () => {
+      if (autoRotateTimerRef.current) {
+        clearTimeout(autoRotateTimerRef.current);
+      }
+    };
+  }, [currentLocationIndex, locations, onLocationChange]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -124,12 +138,21 @@ export default function EarthAnimation({ locations = defaultLocations }) {
         customThreeObject={customPointRender}
         onGlobeReady={() => {
           if (locations.length > 0) {
-            const firstPoint = locations[0];
+            const currentLocation = locations[currentLocationIndex];
             globeRef.current.pointOfView({
-              lat: firstPoint.lat,
-              lng: firstPoint.lng,
+              lat: currentLocation.lat,
+              lng: currentLocation.lng,
               altitude: 2.5
             }, 0);
+          }
+        }}
+        onPointClick={(point) => {
+          // Najdi indeks lokacije in pošlji callback
+          const index = locations.findIndex(
+            loc => loc.lat === point.lat && loc.lng === point.lng
+          );
+          if (index !== -1) {
+            onLocationChange(index);
           }
         }}
       />
