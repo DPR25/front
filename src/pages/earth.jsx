@@ -187,7 +187,7 @@ export default function Earth() {
       </div>
       
       {/* Desna stran - Zemlja */}
-      <div className="w-full md:w-1/2 h-full relative">
+      <div className="w-full md:w-1/2 h-full relative bg-transparent">
         <EarthAnimation 
           locations={worldLocations} 
           currentLocationIndex={currentLocationIndex}

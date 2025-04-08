@@ -115,7 +115,7 @@ export default function EarthAnimation({
   };
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height: '100%', background: 'transparent' }}>
       <Globe
         ref={globeRef}
         width={dimensions.width}
@@ -124,6 +124,7 @@ export default function EarthAnimation({
         bumpImageUrl="https://unpkg.com/three-globe@2.24.13/example/img/earth-topology.png"
         atmosphereColor="lightskyblue"
         atmosphereAltitude={0.15}
+        backgroundColor="rgba(0,0,0,0)"
         showGraticules={false}
         pointsData={points}
         pointLabel="name"
