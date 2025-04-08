@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { LineChart } from '@mui/x-charts';
 import EarthAnimation from '../assets/partials/EarthAnimation';
 import LocationSlider from '../assets/partials/LocationSlider';
 import '../assets/partials/LocationSlider.css';
@@ -28,6 +29,11 @@ export default function Earth() {
         'Tree species': '>16,000',
         'Animal species': '>2,000',
         'Threat level': 'High'
+      },
+      forestData: {
+        labels: ['1990', '2000', '2010', '2015', '2020', '2023'],
+        data: [420, 380, 340, 315, 280, 260],
+        percentChange: -38,
       }
     },
     {
@@ -51,6 +57,11 @@ export default function Earth() {
         'Countries': '3 (Indonesia, Malaysia, Brunei)',
         'Highest peak': '4,095 m (Kinabalu)',
         'Deforestation': '> 30% since 1973'
+      },
+      forestData: {
+        labels: ['1990', '2000', '2010', '2015', '2020', '2023'],
+        data: [330, 290, 230, 200, 180, 165],
+        percentChange: -50,
       }
     },
     {
@@ -74,6 +85,11 @@ export default function Earth() {
         'Activity': 'Dormant',
         'Number of glaciers': '25',
         'Last eruption': '1894'
+      },
+      forestData: {
+        labels: ['1990', '2000', '2010', '2015', '2020', '2023'],
+        data: [120, 110, 105, 108, 112, 115],
+        percentChange: -4,
       }
     },
     {
@@ -97,6 +113,11 @@ export default function Earth() {
         'Established': '1907',
         'Ecosystems': '5 major',
         'Number of glaciers': '>20'
+      },
+      forestData: {
+        labels: ['1990', '2000', '2010', '2015', '2020', '2023'],
+        data: [90, 92, 95, 96, 98, 100],
+        percentChange: 11,
       }
     },
     {
@@ -120,6 +141,11 @@ export default function Earth() {
         'Age': '~600 million years',
         'Plant species': '>1,470',
         'Cable car': 'since 1929'
+      },
+      forestData: {
+        labels: ['1990', '2000', '2010', '2015', '2020', '2023'],
+        data: [45, 42, 38, 35, 39, 43],
+        percentChange: -4,
       }
     }
   ];
@@ -171,6 +197,65 @@ export default function Earth() {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Graf deforestacije */}
+          <div className="forest-chart bg-[#1a1d21] rounded-lg mt-4 p-4 border border-gray-800">
+            <h3 className="text-white text-sm uppercase mb-2 font-semibold">Forest Coverage Trend (1990-2023)</h3>
+            <div className="chart-container relative h-48">
+              {worldLocations[currentLocationIndex].forestData && (
+                <LineChart
+                  series={[
+                    {
+                      data: worldLocations[currentLocationIndex].forestData.data,
+                      label: 'Forest cover',
+                      color: worldLocations[currentLocationIndex].forestData.percentChange >= 0 ? '#10B981' : '#EF4444',
+                    },
+                  ]}
+                  xAxis={[{
+                    data: worldLocations[currentLocationIndex].forestData.labels,
+                    scaleType: 'point',
+                  }]}
+                  height={160}
+                  margin={{ top: 10, bottom: 20, left: 40, right: 10 }}
+                  slotProps={{
+                    legend: {
+                      hidden: true
+                    }
+                  }}
+                  sx={{
+                    '.MuiLineElement-root': {
+                      strokeWidth: 3,
+                    },
+                    '.MuiMarkElement-root': {
+                      stroke: '#1a1d21',
+                      strokeWidth: 1,
+                      fill: worldLocations[currentLocationIndex].forestData.percentChange >= 0 ? '#10B981' : '#EF4444',
+                    },
+                    '& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel': {
+                      fill: '#9CA3AF',
+                      fontSize: '0.75rem',
+                    },
+                    '& .MuiChartsAxis-left .MuiChartsAxis-tickLabel': {
+                      fill: '#9CA3AF',
+                      fontSize: '0.75rem',
+                    },
+                  }}
+                />
+              )}
+              <div className="trend-info mt-2 flex justify-between items-center">
+                <span className="text-sm text-gray-300">
+                  Overall change: 
+                  <span className={worldLocations[currentLocationIndex].forestData.percentChange >= 0 ? 'text-green-500 ml-1' : 'text-red-500 ml-1'}>
+                    {worldLocations[currentLocationIndex].forestData.percentChange >= 0 ? '+' : ''}
+                    {worldLocations[currentLocationIndex].forestData.percentChange}%
+                  </span>
+                </span>
+                <span className="text-sm text-gray-400">
+                  Forest cover (thousand km²)
+                </span>
+              </div>
+            </div>
           </div>
         </div>
         
