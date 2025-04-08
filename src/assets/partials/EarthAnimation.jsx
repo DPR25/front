@@ -1,10 +1,11 @@
- 'use client';
+'use client';
 
 import { useEffect, useState, useRef } from 'react';
 import Globe from 'react-globe.gl';
 import * as THREE from 'three';
 
-const locations = [
+// Privzete lokacije
+const defaultLocations = [
   { lat: -3.4653, lng: -62.2159, color: 'rgba(255, 68, 68, 0.7)', name: 'Amazonski deževni gozd', size: 2, offset: 0 },
   { lat: -2.1833, lng: 113.9184, color: 'rgba(255, 68, 68, 0.7)', name: 'Borneo', size: 2.2, offset: 0.2 },
   { lat: 46.8625, lng: -121.7674, color: 'rgba(43, 255, 184, 0.7)', name: 'Mount Rainier', size: 1.8, offset: 0.4 },
@@ -12,7 +13,7 @@ const locations = [
   { lat: -33.9544, lng: 18.4241, color: 'rgba(43, 255, 184, 0.7)', name: 'Table Mountain', size: 2.1, offset: 0.8 },
 ];
 
-export default function EarthAnimation() {
+export default function EarthAnimation({ locations = defaultLocations }) {
   const [currentLocationIndex, setCurrentLocationIndex] = useState(0);
   const globeRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
@@ -27,8 +28,14 @@ export default function EarthAnimation() {
     }
   }, []);
 
+  // Posodobi točke, ko se spremenijo lokacije
   useEffect(() => {
-    if (!globeRef.current) return;
+    setPoints(locations);
+    setCurrentLocationIndex(0);
+  }, [locations]);
+
+  useEffect(() => {
+    if (!globeRef.current || locations.length === 0) return;
 
     const currentLocation = locations[currentLocationIndex];
 
@@ -43,7 +50,7 @@ export default function EarthAnimation() {
     }, 4000);
 
     return () => clearTimeout(timer);
-  }, [currentLocationIndex]);
+  }, [currentLocationIndex, locations]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -116,12 +123,14 @@ export default function EarthAnimation() {
         pointsTransitionDuration={0}
         customThreeObject={customPointRender}
         onGlobeReady={() => {
-          const firstPoint = locations[0];
-          globeRef.current.pointOfView({
-            lat: firstPoint.lat,
-            lng: firstPoint.lng,
-            altitude: 2.5
-          }, 0);
+          if (locations.length > 0) {
+            const firstPoint = locations[0];
+            globeRef.current.pointOfView({
+              lat: firstPoint.lat,
+              lng: firstPoint.lng,
+              altitude: 2.5
+            }, 0);
+          }
         }}
       />
     </div>
