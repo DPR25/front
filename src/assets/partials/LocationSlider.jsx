@@ -117,7 +117,7 @@ export default function LocationSlider({
                         scale={0.9}
                         img_path={image.img_path || '/dummy-slider/img0.png'}
                         mask_path={image.mask_path || '/dummy-slider/mask0.png'}
-                        orderSwitch={(imageIndex % 2 === 0)}
+                        orderSwitch={(1)}
                       />
                     </div>
                   ))}

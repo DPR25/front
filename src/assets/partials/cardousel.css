@@ -120,6 +120,10 @@
   z-index: 20;
 }
 
+.slick-arrow {
+  transform:  translateY(-100%) scale(1.5);
+}
+
 .location-description {
   background-color: rgba(26, 29, 33, 0.8);
   border-radius: 8px;
