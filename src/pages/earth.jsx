@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart } from '@mui/x-charts';
 import EarthAnimation from '../assets/partials/EarthAnimation';
-import LocationSlider from '../assets/partials/LocationSlider';
+import Cardousel from '../assets/partials/cardousel';
 import '../assets/partials/LocationSlider.css';
 
 export default function Earth() {
@@ -20,9 +20,6 @@ export default function Earth() {
       mask_path: '/dummy-slider/mask0.png',
       description: 'The Amazon rainforest is the largest tropical forest in the world, home to half of all known plant and animal species on Earth.',
       images: [
-        { img_path: '/dummy-slider/img0.png', mask_path: '/dummy-slider/mask0.png' },
-        { img_path: '/dummy-slider/img1.png', mask_path: '/dummy-slider/mask1.png' },
-        { img_path: '/dummy-slider/img2.png', mask_path: '/dummy-slider/mask2.png' },
       ],
       stats: {
         'Area': '5.5 million km²',
@@ -76,8 +73,8 @@ export default function Earth() {
       mask_path: '/dummy-slider/mask2.png',
       description: 'Mount Rainier is an active stratovolcano in Washington state, USA, known for its glaciers.',
       images: [
-        { img_path: '/dummy-slider/img2.png', mask_path: '/dummy-slider/mask2.png' },
         { img_path: '/dummy-slider/img3.png', mask_path: '/dummy-slider/mask3.png' },
+        { img_path: '/dummy-slider/img2.png', mask_path: '/dummy-slider/mask2.png' },
         { img_path: '/dummy-slider/img0.png', mask_path: '/dummy-slider/mask0.png' },
       ],
       stats: {
@@ -133,6 +130,7 @@ export default function Earth() {
       description: 'Table Mountain is an iconic flat-topped mountain that dominates the city of Cape Town in South Africa.',
       images: [
         { img_path: '/dummy-slider/img0.png', mask_path: '/dummy-slider/mask0.png' },
+
         { img_path: '/dummy-slider/img3.png', mask_path: '/dummy-slider/mask3.png' },
         { img_path: '/dummy-slider/img2.png', mask_path: '/dummy-slider/mask2.png' },
       ],
@@ -150,125 +148,15 @@ export default function Earth() {
     }
   ];
 
-  const handleSlideChange = (index) => {
-    setCurrentLocationIndex(index);
-  };
 
   return (
     <div className="w-full h-screen bg-[#131518] overflow-hidden flex flex-col md:flex-row">
       {/* Leva stran - Informacije in seznam lokacij */}
-      <div className="w-full md:w-1/2 p-5 flex flex-col relative z-10">
-        <div className="flex-grow">
-          <h1 className="text-3xl font-bold text-white">{worldLocations[currentLocationIndex].name}</h1>
-          
-          {/* Seznam lokacij */}
-          <div className="location-list mt-4">
-            <ul className="space-y-2">
-              {worldLocations.map((location, index) => (
-                <li 
-                  key={index}
-                  className={`cursor-pointer transition-all duration-300 ${
-                    currentLocationIndex === index 
-                      ? "text-white font-bold pl-2 border-l-4 border-white" 
-                      : "text-gray-400 hover:text-gray-200 pl-2"
-                  }`}
-                  onClick={() => setCurrentLocationIndex(index)}
-                >
-                  {location.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Opis lokacije */}
-          <div className="location-description bg-[#1a1d21] rounded-lg mt-6 p-4 border border-gray-800">
-            <p className="text-gray-300 mb-4">{worldLocations[currentLocationIndex].description}</p>
-            
-            {worldLocations[currentLocationIndex].stats && (
-              <div className="stats-container">
-                <h3 className="text-white text-sm uppercase mb-2 font-semibold">Location Data</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {Object.entries(worldLocations[currentLocationIndex].stats).map(([key, value], index) => (
-                    <div key={index} className="stat-item bg-[#252a30] p-2 rounded text-sm">
-                      <span className="stat-label text-gray-400">{key}:</span>{' '}
-                      <span className="stat-value text-white font-medium">{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Graf deforestacije */}
-          <div className="forest-chart bg-[#1a1d21] rounded-lg mt-4 p-4 border border-gray-800">
-            <h3 className="text-white text-sm uppercase mb-2 font-semibold">Forest Coverage Trend (1990-2023)</h3>
-            <div className="chart-container relative h-48">
-              {worldLocations[currentLocationIndex].forestData && (
-                <LineChart
-                  series={[
-                    {
-                      data: worldLocations[currentLocationIndex].forestData.data,
-                      label: 'Forest cover',
-                      color: worldLocations[currentLocationIndex].forestData.percentChange >= 0 ? '#10B981' : '#EF4444',
-                    },
-                  ]}
-                  xAxis={[{
-                    data: worldLocations[currentLocationIndex].forestData.labels,
-                    scaleType: 'point',
-                  }]}
-                  height={160}
-                  margin={{ top: 10, bottom: 20, left: 40, right: 10 }}
-                  slotProps={{
-                    legend: {
-                      hidden: true
-                    }
-                  }}
-                  sx={{
-                    '.MuiLineElement-root': {
-                      strokeWidth: 3,
-                    },
-                    '.MuiMarkElement-root': {
-                      stroke: '#1a1d21',
-                      strokeWidth: 1,
-                      fill: worldLocations[currentLocationIndex].forestData.percentChange >= 0 ? '#10B981' : '#EF4444',
-                    },
-                    '& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel': {
-                      fill: '#9CA3AF',
-                      fontSize: '0.75rem',
-                    },
-                    '& .MuiChartsAxis-left .MuiChartsAxis-tickLabel': {
-                      fill: '#9CA3AF',
-                      fontSize: '0.75rem',
-                    },
-                  }}
-                />
-              )}
-              <div className="trend-info mt-2 flex justify-between items-center">
-                <span className="text-sm text-gray-300">
-                  Overall change: 
-                  <span className={worldLocations[currentLocationIndex].forestData.percentChange >= 0 ? 'text-green-500 ml-1' : 'text-red-500 ml-1'}>
-                    {worldLocations[currentLocationIndex].forestData.percentChange >= 0 ? '+' : ''}
-                    {worldLocations[currentLocationIndex].forestData.percentChange}%
-                  </span>
-                </span>
-                <span className="text-sm text-gray-400">
-                  Forest cover (thousand km²)
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="w-full md:w-1/2 p-5 flex flex-col justify-end relative z-10">
+  
         
         {/* Srednji del - Slider s Card komponentami */}
-        <div className="flex-grow flex items-center justify-center my-6">
-          {currentLocationIndex !== undefined && worldLocations.length > 0 && (
-            <LocationSlider 
-              locations={worldLocations}
-              currentLocation={worldLocations[currentLocationIndex]}
-              onSlideChange={handleSlideChange}
-            />
-          )}
-        </div>
+        <Cardousel/>
       </div>
       
       {/* Desna stran - Zemlja */}

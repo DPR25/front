@@ -14,7 +14,6 @@ export default function App() {
             <Route path='' element={<Landing/>}/>
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/map" element={<Map/>} />
-            <Route path="/earth" element={<Earth/>} />
         </Routes>
 
         </div>
