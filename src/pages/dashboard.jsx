@@ -8,14 +8,14 @@ export default function Dashboard() {
   const [currentLocationIndex, setCurrentLocationIndex] = useState(0);
 
   return (
-    <div className="w-full h-screen bg-[#131518] overflow-hidden flex justify-center m-0 p-0 flex-col md:flex-row">
+    <div className=" w-full h-screen bg-[#131518] overflow-hidden flex justify-center m-0 p-0 flex-col md:flex-row">
       {/* Leva stran - Informacije in seznam lokacij */}
       <div className="w-full md:w-full p-5 flex flex-col justify-end relative z-10">
   
         
         {/* Srednji del - Slider s Card komponentami */}
 
-        <div className='h-screen w-full flex items-baseline'>
+        <div className= 'h-[100%] w-full ml-6 flex border'>
             
         </div>
 
