@@ -1,0 +1,13 @@
+.modelcard:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    background-color: rgb(70, 70, 70);
+    border: 1px solid rgb(160, 160, 160);
+}
+
+.modelcard-active {
+    transform: scale(1.05);
+    background-color: rgb(70, 70, 70);
+    border: 1px solid rgb(160, 160, 160);
+}
+

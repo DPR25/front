@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Earth from '../assets/partials/earth';
+import ModelSelector from '../assets/partials/modelselector';
 import Cardousel from '../assets/partials/cardousel';
 import '../assets/partials/LocationSlider.css';
 
@@ -24,9 +25,12 @@ export default function Dashboard() {
       </div>
       
       {/* Desna stran - Zemlja */}
-      <div className="w-full md:w-1/3 h-full relative bg-transparent flex items-center justify-baseline">
-        <div className="w-[300px] h-[300px] flex items-center justify-center">
+      <div className="w-full md:w-1/2 h-full bg-transparent flex flex-col items-center">
+        <div className="flex items-center">
           <Earth/>
+        </div>
+        <div className='w-full h-80'>
+            <ModelSelector/>
         </div>
       </div>
     </div>
