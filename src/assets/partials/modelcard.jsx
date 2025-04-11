@@ -4,11 +4,11 @@ import './modelselector.css'
 export default function ModelCard(props) {
     return (
         <div>
-            <div className='h-[80px] '>
+            <div className='h-[80px]'>
             <h1 className='font-semibold text-20' >{props.modelName}</h1>
             </div>
 
-            <div className='flex justify-items-center'>
+            <div className='flex justify-items-center relative'>
                 <div>
                 <div className=''>
                 <h2 className='font-normal text-13'>Epochs: {props.epochs}</h2>
@@ -27,8 +27,8 @@ export default function ModelCard(props) {
                 </div>
                 </div>
 
-                <div className='relative h-30 w-30 items-center justify-center p-'>
-                    <div className='absolute w-40 h-40 top-10 left-0'>
+                <div className=' h-30 w-30 items-center justify-center p-'>
+                    <div className='absolute w-40 h-40 top-10 left-30'>
                     <img src="/brain.svg" alt="" width={70}/>
                     </div>
                 </div>

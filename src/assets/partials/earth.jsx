@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom'; // Add this import
 import Globe from 'react-globe.gl';
 import { MeshLambertMaterial, DoubleSide } from 'three';
 import * as topojson from 'topojson-client';
@@ -6,85 +7,102 @@ import * as topojson from 'topojson-client';
 const polygonsMaterial = new MeshLambertMaterial({ color: 'gray', side: DoubleSide });
 
 export default function Earth() {
-    const globeRef = useRef(null);
-    const [landPolygons, setLandPolygons] = useState([]);
-    const [points, setPoints] = useState([
-        { lat: -3.4653, lng: -62.2159, color: 'rgb(149, 255, 43)', name: 'Amazonski deževni gozd', size: 2, offset: 0, opacity: 1 },
-    ]);
+  const globeRef = useRef(null);
+  const [landPolygons, setLandPolygons] = useState([]);
+  const [points, setPoints] = useState([
+    { lat: -3.4653, lng: -62.2159, color: 'rgb(149, 255, 43)', name: 'Amazonski deževni gozd', size: 2, offset: 0, opacity: 1 },
+  ]);
+  const location = useLocation(); // Add this to track route changes
 
-    useEffect(() => {
-        // Load land polygons data
-        fetch('//unpkg.com/world-atlas/land-110m.json')
-            .then(res => res.json())
-            .then(landTopo => {
-                setLandPolygons(topojson.feature(landTopo, landTopo.objects.land).features);
-            });
-    }, []);
+  // Load land polygons (unchanged)
+  useEffect(() => {
+    fetch('//unpkg.com/world-atlas/land-110m.json')
+      .then(res => res.json())
+      .then(landTopo => {
+        setLandPolygons(topojson.feature(landTopo, landTopo.objects.land).features);
+      });
+  }, []);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setPoints(prevPoints =>
-                prevPoints.map(point => ({
-                    ...point,
-                    opacity: 0.5 + 0.5 * Math.sin(Date.now() * 0.005), // Oscillates between 0.5 and 1
-                }))
-            );
-        }, 50); // Update every 50ms for smooth flickering
-    
-        return () => clearInterval(interval); // Cleanup on unmount
-    }, []);
+  // Flickering effect (unchanged)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPoints(prevPoints =>
+        prevPoints.map(point => ({
+          ...point,
+          opacity: 0.5 + 0.5 * Math.sin(Date.now() * 0.005),
+        }))
+      );
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
 
-    const handleGlobeReady = () => {
-        // Set the initial viewpoint (e.g., over the Pacific Ocean)
-        globeRef.current.pointOfView(
-            {
-                lat: 0, // Start at the equator
-                lng: -180, // Start over the Pacific Ocean (180° W)
-                altitude: 2.5, // Same zoom level as the target
-            },
-            0 // Instant (no animation for the initial position)
-        );
+  // Animation on route change
+  useEffect(() => {
+    if (!globeRef.current) return;
 
-        // After a delay, rotate to the target point (Amazon Rainforest)
-        setTimeout(() => {
-            if (points.length > 0) {
-                const targetPoint = points[0]; // Amazon Rainforest
-                globeRef.current.pointOfView(
-                    {
-                        lat: targetPoint.lat, // -3.4653
-                        lng: targetPoint.lng, // -62.2159
-                        altitude: 2.5,
-                    },
-                    2000 // 2-second animation for smooth rotation
-                );
-            }
-        }, 1000); // Delay of 1 second before starting the rotation
-    };
-
-    return (
-        <div>
-            <Globe
-                ref={globeRef}
-                backgroundColor="rgba(0,0,0,0)"
-                showGlobe={false}
-                showAtmosphere={false}
-                polygonsData={landPolygons}
-                polygonCapMaterial={polygonsMaterial}
-                polygonSideColor={() => 'rgba(0, 0, 0, 0)'}
-                pointsData={points}
-                pointLat="lat"
-                pointLng="lng"
-                pointColor={(d) => `rgba(149, 255, 43, ${d.opacity})`} // Directly use rgba with dynamic opacity
-                pointRadius={(d) => d.size}
-                pointLabel="name"
-                pointAltitude={0.01}
-                pointResolution={64}
-                pointsMerge={false}
-                pointsTransitionDuration={0}
-                width={600}
-                height={600}
-                onGlobeReady={handleGlobeReady}
-            />
-        </div>
+    // Set initial viewpoint (Pacific Ocean)
+    globeRef.current.pointOfView(
+      {
+        lat: 0,
+        lng: -180,
+        altitude: 2.5,
+      },
+      0
     );
+
+    // Rotate to Amazon after delay
+    setTimeout(() => {
+      if (points.length > 0) {
+        const targetPoint = points[0];
+        globeRef.current.pointOfView(
+          {
+            lat: targetPoint.lat,
+            lng: targetPoint.lng,
+            altitude: 2.5,
+          },
+          2000
+        );
+      }
+    }, 1000);
+  }, [location.pathname]); // Re-run when route changes
+
+  const handleGlobeReady = () => {
+    // Initial setup can stay, but useEffect handles animation now
+    globeRef.current.pointOfView(
+      {
+        lat: 0,
+        lng: -180,
+        altitude: 2.5,
+      },
+      0
+    );
+  };
+
+  // Return unchanged
+  return (
+    <div>
+      <Globe
+        ref={globeRef}
+        backgroundColor="rgba(0,0,0,0)"
+        showGlobe={false}
+        showAtmosphere={false}
+        polygonsData={landPolygons}
+        polygonCapMaterial={polygonsMaterial}
+        polygonSideColor={() => 'rgba(0, 0, 0, 0)'}
+        pointsData={points}
+        pointLat="lat"
+        pointLng="lng"
+        pointColor={(d) => `rgba(149, 255, 43, ${d.opacity})`}
+        pointRadius={(d) => d.size}
+        pointLabel="name"
+        pointAltitude={0.01}
+        pointResolution={64}
+        pointsMerge={false}
+        pointsTransitionDuration={0}
+        width={600}
+        height={600}
+        onGlobeReady={handleGlobeReady}
+      />
+    </div>
+  );
 }

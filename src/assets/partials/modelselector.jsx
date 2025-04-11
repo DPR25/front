@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import ModelCard from './modelcard'; // Fixed case to match typical naming convention
 import './modelselector.css'; // Import your CSS file
 
-const ModelSelector = () => {
+const ModelSelector = ({activeIndex, setActiveIndex}) => {
   const [models, setModels] = useState(null);
   const [error, setError] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  
 
   useEffect(() => {
     fetch('/model_config.json')
@@ -46,7 +46,7 @@ const ModelSelector = () => {
   return (
     <div className="max-w-full mx-auto">
         <div className='flex w-full gap-2 items-start relative'> 
-      <h1 className="text-2xl font-bold mb-4">Segmentation Models</h1>
+      <h1 className="text-2xl font-bold mb-4">Segmentation Models Info</h1>
         
         
         <img src="/help.svg" alt=""  width={30}/>
