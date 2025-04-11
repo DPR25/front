@@ -27,8 +27,10 @@ export default function ModelCard(props) {
                 </div>
                 </div>
 
-                <div className='flex h-30 items-center justify-center p-5'>
+                <div className='relative h-30 w-30 items-center justify-center p-'>
+                    <div className='absolute w-40 h-40 top-10 left-0'>
                     <img src="/brain.svg" alt="" width={70}/>
+                    </div>
                 </div>
             </div>
 

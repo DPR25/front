@@ -29,7 +29,7 @@ const ModelSelector = () => {
 
   if (error) {
     return (
-      <div className="p-5">
+      <div className="">
         <h1 className="text-2xl font-bold">Error</h1>
         <pre className="text-red-600">{error}</pre>
       </div>
@@ -44,17 +44,18 @@ const ModelSelector = () => {
   const modelEntries = Object.entries(models);
 
   return (
-    <div className="p-5 max-w-full mx-auto">
-        <div className='flex w-full gap-2 items-start px-5'> 
+    <div className="max-w-full mx-auto">
+        <div className='flex w-full gap-2 items-start relative'> 
       <h1 className="text-2xl font-bold mb-4">Segmentation Models</h1>
+        
+        
         <img src="/help.svg" alt=""  width={30}/>
         </div>
-      <div className="w-full overflow-x-auto pb-4 snap-x snap-mandatory scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-200 scrollbar-h-2">
-        <div className="flex gap-5 p-5 min-w-max">
+        <div className="w-full overflow-x-auto overflow-y-hidden pb-4 snap-x snap-mandatory scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-200 scrollbar-h-2 p-5">        <div className="flex gap-5 min-w-max">
           {modelEntries.map(([key, model], index) => (
             <div
               key={key}
-              className={`modelcard w-[250px] rounded-xl p-3 border h-60 ${activeIndex === index ? 'modelcard-active' : ''}`}
+              className={`p-5 modelcard w-[250px] rounded-xl border h-65 ${activeIndex === index ? 'modelcard-active' : ''}`}
 
               onClick={() => setActiveIndex(index)} // Update active index on click
             >
