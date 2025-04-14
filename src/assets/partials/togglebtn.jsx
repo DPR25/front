@@ -4,7 +4,7 @@ import './togglebtn.css';
 export default function ToggleBtn({isToggled, onToggle}) {
 
     return (
-        <div className="flex gap-5">
+        <div className="flex gap-12">
             <button onClick={onToggle} className='hover:cursor-pointer'>
                 <div className={`toggle-btn ${isToggled ? 'toggled' : ''}`}>
                     

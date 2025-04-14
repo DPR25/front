@@ -28,6 +28,7 @@ export default function Dashboard() {
         setOrderedData(mappedData);
         const dataWithClouds = addCloudCoverage(mappedData, data);
         setOrderedDataWithClouds(dataWithClouds);
+        console.log(JSON.stringify(data.metadata.job_data.class_legend))
       } catch (err) {
         setError(err.message);
       } finally {
@@ -82,9 +83,9 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="h-screen w-screen flex p-10">
-      <div className="w-1/2 h-screen flex justify-items-center flex-col justify-center">
-        <div className="h-2/3 flex justify-center items-center">
+    <div className="h-screen w-screen flex px-5">
+      <div className="w-1/2 h-full flex justify-items-center flex-col justify-center p-10">
+        <div className="h-full flex justify-center items-center">
           <Visualize
             jobID={jobID}
             orderedData={orderedDataWithClouds}
@@ -92,11 +93,8 @@ export default function Dashboard() {
             setActiveIndex={setSlideActiveIndex}
             loading={loading}
             error={error}
+            posts={posts}
           />
-        </div>
-
-        <div className="h-1/3 flex justify-center items-center">
-          <p>im alive</p>
         </div>
       </div>
 

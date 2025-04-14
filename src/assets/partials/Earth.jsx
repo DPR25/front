@@ -1,25 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import Globe from 'react-globe.gl';
-import { MeshLambertMaterial, DoubleSide, TextureLoader, Mesh, SphereGeometry, MeshPhongMaterial } from 'three';
-
-
 
 export default function Earth() {
   const globeRef = useRef(null);
-  //const [landPolygons, setLandPolygons] = useState([]);
   const [points, setPoints] = useState([
-    { lat: -3.4653, lng: -62.2159, color: 'rgb(149, 255, 43)', name: 'Amazonski deževni gozd', size: 2, offset: 0, opacity: 1 },
+    {
+      lat: -3.4653,
+      lng: -62.2159,
+      color: 'rgb(149, 255, 43)',
+      name: 'Amazonski deževni gozd',
+      size: 2,
+      opacity: 1,
+    },
   ]);
   const location = useLocation();
-
-
 
   // Flickering effect
   useEffect(() => {
     const interval = setInterval(() => {
-      setPoints(prevPoints =>
-        prevPoints.map(point => ({
+      setPoints((prevPoints) =>
+        prevPoints.map((point) => ({
           ...point,
           opacity: 0.5 + 0.5 * Math.sin(Date.now() * 0.005),
         }))
@@ -28,12 +29,14 @@ export default function Earth() {
     return () => clearInterval(interval);
   }, []);
 
-  // Rotate globe to point on route change
+  // Spin animation
   useEffect(() => {
     if (!globeRef.current) return;
 
+    // Initial view
     globeRef.current.pointOfView({ lat: 0, lng: -180, altitude: 2.5 }, 0);
 
+    // Animate to point after delay
     setTimeout(() => {
       if (points.length > 0) {
         const targetPoint = points[0];
@@ -43,50 +46,18 @@ export default function Earth() {
             lng: targetPoint.lng,
             altitude: 2.5,
           },
-          2000
+          2000 // 2-second animation
         );
       }
     }, 1000);
   }, [location.pathname]);
 
-  // Globe ready - styling and cloud setup
-  const handleGlobeReady = () => {
-    const globe = globeRef.current;
-
-    // Auto-rotate
-    const controls = globe.controls();
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.0;
-
-    // Add clouds
-    const CLOUDS_IMG_URL = './clouds.png'; // Make sure this is in your public folder
-    const CLOUDS_ALT = 0.004;
-    const CLOUDS_ROTATION_SPEED = -0.006;
-
-    new TextureLoader().load(CLOUDS_IMG_URL, (cloudsTexture) => {
-      const clouds = new Mesh(
-        new SphereGeometry(globe.getGlobeRadius() * (1 + CLOUDS_ALT), 75, 75),
-        new MeshPhongMaterial({ map: cloudsTexture, transparent: true })
-      );
-      globe.scene().add(clouds);
-
-      (function rotateClouds() {
-        clouds.rotation.y += (CLOUDS_ROTATION_SPEED * Math.PI) / 180;
-        requestAnimationFrame(rotateClouds);
-      })();
-    });
-
-    // Set initial position
-    globe.pointOfView({ lat: 0, lng: -180, altitude: 2.5 }, 0);
-  };
-
   return (
-    <div>
+    <div style={{ width: '600px', height: '600px' }}>
       <Globe
         ref={globeRef}
-        animateIn={false}
-        globeImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg"
-        bumpImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png"
+        globeImageUrl="https://unpkg.com/three-globe@2.31.0/example/img/earth-blue-marble.jpg"
+        bumpImageUrl="https://unpkg.com/three-globe@2.31.0/example/img/earth-topology.png"
         backgroundColor="rgba(0,0,0,0)"
         showAtmosphere={true}
         pointsData={points}
@@ -101,7 +72,11 @@ export default function Earth() {
         pointsTransitionDuration={0}
         width={600}
         height={600}
-        onGlobeReady={handleGlobeReady}
+        onGlobeReady={() => {
+          const globe = globeRef.current;
+          const controls = globe.controls();
+          controls.autoRotate = false; // Disable auto-rotation for spin animation
+        }}
       />
     </div>
   );

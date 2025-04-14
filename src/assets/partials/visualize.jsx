@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Card from './card';
 import DatetimeStamp from './datetimestamp';
 import ToggleBtn from './togglebtn';
+import Legend from './Legend';
 
 export default function Visualize({
   orderedData,
@@ -9,6 +10,7 @@ export default function Visualize({
   setActiveIndex,
   loading,
   error,
+  posts
 }) {
   const [isToggled, setIsToggled] = useState(false);
 
@@ -59,7 +61,10 @@ export default function Visualize({
         </button>
       </div>
 
-      <div className="flex w-full justify-between items-center px-5">
+      {/* AAA */}
+      <div className='h-20 w-full '>
+        <div className="flex w-full justify-between items-center px-5 h-1/2">
+     
         <div className="w-1/2 flex items-center justify-center">
           <div className="w-1/2 font-semibold">
             <p>Timestamp</p>
@@ -77,18 +82,31 @@ export default function Visualize({
           </div>
         </div>
 
-        <div className="flex w-1/4 items-center justify-center">
-          <div className="w-40 font-semibold">
-            <p>View : {`${isToggled ? 'Image' : 'Mask'}`}</p>
+        <div className="flex flex-col gap-3 w-1/4 justify-baseline h-full items-baseline">
+
+          <div className='flex w-full justify-between pr-10 font-semibold'>
+            <img src="/cloud.svg" alt="" width={30}/>
+            <p>{orderedData[activeIndex].cloudCoverage.toFixed(2)} %</p>
           </div>
-          <ToggleBtn
-            isToggled={isToggled}
-            onToggle={() => {
-              setIsToggled(!isToggled);
-            }}
-          />
+
+          <div className='flex h-full flex-col'>
+            <ToggleBtn
+              isToggled={isToggled}
+              onToggle={() => {
+                setIsToggled(!isToggled);
+              }}
+            />
+          </div>
         </div>
       </div>
+
+    </div>
+
+    {/* BBB */}
+    <div className="w-full h-50">
+        <Legend classData={posts.metadata.job_data.class_legend}/>
+    </div>
+
     </div>
   );
 }
