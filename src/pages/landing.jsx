@@ -22,7 +22,7 @@ function Landing() {
                 
                     
                     <Link
-                        to='/dashboard'
+                        to='/dashboard/133f5bfe-6b8b-49a4-bcb8-9dc289307b54'
                         className="mt-auto w-[50%] py-2 hover:cursor-pointer border- text-xl 
                     font-light rounded-[10px] hover:text-gray-500 transition-all duration-200 text-center"
                         >

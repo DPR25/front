@@ -42,7 +42,7 @@ export default function Dashboard() {
       });
       const geoData = await geoRes.json();
       console.log(geoData)
-      setLocationName(geoData.display_name || "Unknown location");
+      setLocationName(geoData.display_name || "Amazon rainforest");
 
       const mappedData = mapImageUrlsReverse(data.image_sources || []);
       setOrderedData(mappedData);
