@@ -1,11 +1,17 @@
-FROM node:20-alpine as builder
+FROM node:12-alpine
 
 WORKDIR /app
-COPY package*.json ./
+
+COPY package.json .
+
 RUN npm install
+
+RUN npm i -g serve
+
 COPY . .
+
 RUN npm run build
 
-FROM socialengine/nginx-spa:latest
-COPY --from=builder /app/dist /app
-RUN chmod -R 777 /app
+EXPOSE 3000
+
+CMD [ "serve", "-s", "dist" ]
