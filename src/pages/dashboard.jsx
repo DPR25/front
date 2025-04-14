@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Earth from '../assets/partials/Earth';
 import ModelSelector from '../assets/partials/modelselector';
 import Visualize from '../assets/partials/visualize';
 import '../assets/partials/LocationSlider.css';
 
 export default function Dashboard() {
+  const { id } = useParams(); 
   const [segModelActiveIndex, setSegModelActiveIndex] = useState(0);
   const [slideActiveIndex, setSlideActiveIndex] = useState(0);
   const [orderedData, setOrderedData] = useState(null);
@@ -12,20 +14,22 @@ export default function Dashboard() {
   const [posts, setPosts] = useState([]); 
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
-  const jobID = '00000000-0000-0000-0000-000000000001';
+  //const jobID = '00000000-0000-0000-0000-000000000001';
   const [tagIndex, setTagIndex] = useState(0)
 
   
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`/api/locations/${jobID}`);
+        const response = await fetch(`/api/locations/${id}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
+        //console.log(data)
         setPosts(data);
         const mappedData = mapImageUrlsReverse(data.image_sources || []);
+        console.log(data.image_sources)
         setOrderedData(mappedData);
         const dataWithClouds = addCloudCoverage(mappedData, data);
         setOrderedDataWithClouds(dataWithClouds);
@@ -36,10 +40,10 @@ export default function Dashboard() {
         setLoading(false);
       }
     };
-  
+
+   
     fetchPosts();
-  }, [jobID]);
-  
+  }, []);
   const mapImageUrlsReverse = (urls) => {
     const mapped = [];
     for (let i = urls.length - 2; i >= 0; i -= 2) {
@@ -47,10 +51,11 @@ export default function Dashboard() {
       const maskUrl = urls[i + 1];
   
       const match = imageUrl.match(
-        /satlas_rgb2_(\d{4}-\d{2}-\d{2})-(\d{4}-\d{2}-\d{2})_(\d)_image\.png$/
+        /satlas_[a-z0-9]+_(\d{4}-\d{2}-\d{2})-(\d{4}-\d{2}-\d{2})_(\d+)_image\.png$/
       );
+  
       if (match) {
-        const imageFname = `satlas_rgb2_${match[1]}-${match[2]}_${match[3]}_image.png`;
+        const imageFname = imageUrl.split("/").pop(); // just get the filename
         const startDate = match[1];
         const endDate = match[2];
         const seriesIndex = parseInt(match[3], 10);
@@ -67,6 +72,7 @@ export default function Dashboard() {
     }
     return mapped;
   };
+  
   
   const addCloudCoverage = (mappedArray, jsonData) => {
     const statistics = jsonData.statistics || [];
@@ -105,7 +111,7 @@ export default function Dashboard() {
 
         <div className="h-full flex justify-center items-center">
           <Visualize
-            jobID={jobID}
+            jobID={id}
             orderedData={orderedDataWithClouds}
             activeIndex={slideActiveIndex}
             setActiveIndex={setSlideActiveIndex}

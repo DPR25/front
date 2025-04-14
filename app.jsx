@@ -11,7 +11,7 @@ export default function App() {
 
         <Routes>
             <Route path='' element={<Landing/>}/>
-            <Route path="/dashboard" element={<Dashboard/>} />
+            <Route path="/dashboard/:id" element={<Dashboard />} />
             <Route path="/map" element={<Map/>} />
         </Routes>
 
