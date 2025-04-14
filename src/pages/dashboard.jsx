@@ -14,36 +14,64 @@ export default function Dashboard() {
   const [posts, setPosts] = useState([]); 
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
-  //const jobID = '00000000-0000-0000-0000-000000000001';
   const [tagIndex, setTagIndex] = useState(0)
-
+  const [long, setLong] = useState(0)
+  const [lat, setLat] = useState(0)
+  const [locationName, setLocationName] = useState("")
   
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch(`/api/locations/${id}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        //console.log(data)
-        setPosts(data);
-        const mappedData = mapImageUrlsReverse(data.image_sources || []);
-        console.log(data.image_sources)
-        setOrderedData(mappedData);
-        const dataWithClouds = addCloudCoverage(mappedData, data);
-        setOrderedDataWithClouds(dataWithClouds);
-        console.log(JSON.stringify(data.metadata.job_data.class_legend))
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch(`/api/locations/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
+      const data = await response.json();
+      setPosts(data);
 
-   
-    fetchPosts();
-  }, []);
+      const longitude = data.metadata.job_data.center[0];
+      const latitude = data.metadata.job_data.center[1];
+      setLong(longitude);
+      setLat(latitude);
+
+      // Reverse geocode with OpenStreetMap
+      const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`, {
+        headers: {
+          'User-Agent': 'timber.ai'  // Be nice to the API :)
+        }
+      });
+      const geoData = await geoRes.json();
+      console.log(geoData)
+      setLocationName(geoData.display_name || "Unknown location");
+
+      const mappedData = mapImageUrlsReverse(data.image_sources || []);
+      setOrderedData(mappedData);
+      const dataWithClouds = addCloudCoverage(mappedData, data);
+      setOrderedDataWithClouds(dataWithClouds);
+
+      console.log(JSON.stringify(data.metadata.job_data.class_legend));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchPosts();
+}, [id]);
+
+
+
+  async function getLocation(lat, lon) {
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`, {
+      headers: {
+        'User-Agent': 'your-app-name' // optional but polite
+      }
+    });
+    const data = await res.json();
+    console.log(data.display_name);
+  }
+
   const mapImageUrlsReverse = (urls) => {
     const mapped = [];
     for (let i = urls.length - 2; i >= 0; i -= 2) {
@@ -110,6 +138,7 @@ export default function Dashboard() {
       </div>
 
         <div className="h-full flex justify-center items-center">
+
           <Visualize
             jobID={id}
             orderedData={orderedDataWithClouds}
@@ -127,11 +156,16 @@ export default function Dashboard() {
       <div className="w-1/2 flex flex-col items-center gap-15">
         <div className="w-full h-1/2 flex justify-center">
           <div className="">
-            <Earth />
+            <Earth 
+            // lat={posts.metadata.job_data.center[0]} 
+            // long={posts.metadata.job_data.center[1]}
+            lat={-9.71160} long={-61.28260}
+            />
           </div>
         </div>
 
         <div className="overflow-hidden h-85 w-2/3 p-">
+            <p>{locationName}</p>
           <ModelSelector
             activeIndex={segModelActiveIndex}
             setActiveIndex={setSegModelActiveIndex}

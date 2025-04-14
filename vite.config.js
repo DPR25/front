@@ -12,5 +12,12 @@ export default defineConfig({
         changeOrigin: true,
         secure: true,
       },
-    }}
-})
+      '/nominatim': {
+        target: 'https://nominatim.openstreetmap.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/nominatim/, ''),
+      },
+    },
+  },
+});
+

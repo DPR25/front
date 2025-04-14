@@ -13,7 +13,7 @@ const Legend = ({ classData }) => {
           <div key={key} className='flex items-center gap-4 mb-2'>
             <p className='w-24'>{key}</p>
             <div
-              className='w-3 h-3 rounded-full border-1 border-gray-50'
+              className='w-5 h-5 rounded-full'
               style={{ backgroundColor: `rgb(${value.join(',')})` }}
             ></div>
           </div>

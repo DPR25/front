@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import Globe from 'react-globe.gl';
 
-export default function Earth() {
+export default function Earth({lat, long}) {
   const globeRef = useRef(null);
   const [points, setPoints] = useState([
     {
-      lat: -3.4653,
-      lng: -62.2159,
+      lat: lat,
+      lng: long,
       color: 'rgb(149, 255, 43)',
       name: 'Amazonski deževni gozd',
       size: 2,
