@@ -107,10 +107,32 @@ export default function DashboardMobile() {
         </p>
       </div>
 
-      {/* Earth Component */}
-      <div className="w-full h-[400px] mb-3 bg-[#1b1c1d] rounded-xl overflow-hidden items-center">
-        <Earth lat={lat} long={long} />
+      {/* Tag Toggle */}
+      <div className="w-full h-10 mb-3 rounded-xl overflow-hidden flex">
+        <button 
+          onClick={() => setTagIndex(0)}
+          className={`flex-1 h-full flex items-center justify-center ${
+            tagIndex === 0 ? 'bg-[#1b1c1d] text-white' : 'bg-[#131518] text-gray-400'
+          }`}
+        >
+          Images
+        </button>
+        <button 
+          onClick={() => setTagIndex(1)}
+          className={`flex-1 h-full flex items-center justify-center ${
+            tagIndex === 1 ? 'bg-[#1b1c1d] text-white' : 'bg-[#131518] text-gray-400'
+          }`}
+        >
+          Data
+        </button>
       </div>
+
+      {/* Earth Component - Only show in Images view */}
+      {tagIndex === 0 && (
+        <div className="w-full h-[400px] mb-3 bg-[#1b1c1d] rounded-xl overflow-hidden items-center">
+          <Earth lat={lat} long={long} />
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="flex-1">
