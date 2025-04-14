@@ -10,7 +10,9 @@ export default function Visualize({
   setActiveIndex,
   loading,
   error,
-  posts
+  posts,
+  tagIndex,
+  changeTagIndex
 }) {
   const [isToggled, setIsToggled] = useState(false);
 

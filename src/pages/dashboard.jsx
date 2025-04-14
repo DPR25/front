@@ -12,7 +12,8 @@ export default function Dashboard() {
   const [posts, setPosts] = useState([]); 
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
-  const jobID = '0bc098b0-4050-41ed-be23-230723d9457f';
+  const jobID = '00000000-0000-0000-0000-000000000001';
+  const [tagIndex, setTagIndex] = useState(0)
 
   
   useEffect(() => {
@@ -84,7 +85,24 @@ export default function Dashboard() {
 
   return (
     <div className="h-screen w-screen flex px-5">
-      <div className="w-1/2 h-full flex justify-items-center flex-col justify-center p-10">
+
+      <div className="w-1/2 h-full flex justify-items-center flex-col justify-center p-10 relative">
+
+      <div className='absolute w-150 h-10 top-10 rounded-4xl  left-10 flex'>
+        <button onClick={() => {setTagIndex(1-tagIndex)}}>
+        <div className={`w-50 h-full p-2 rounded-tl-4xl px-12 py-2 border border-transparent hover:cursor-pointer ${tagIndex === 1 ? 
+            " border-b-gray-600 border-r-gray-600 bg-[#131518]" : 
+            "border-l-gray-600 border-t-gray-600 border-r-gray-600 " }`}>
+                <p>Images</p>
+            </div>
+        </button>
+
+        <button onClick={() => {setTagIndex(1-tagIndex)}} >
+        <div className={`w-50 h-full p-2 px-12 py-2 border border-transparent hover:cursor-pointer ${tagIndex === 1 ? 
+            "" : " border-b-gray-600 border-r-gray-600 bg-[#131518]"}`}> <p>Data</p></div>
+        </button>
+      </div>
+
         <div className="h-full flex justify-center items-center">
           <Visualize
             jobID={jobID}
@@ -94,6 +112,8 @@ export default function Dashboard() {
             loading={loading}
             error={error}
             posts={posts}
+            tagIndex={tagIndex}
+            setTagIndex={setTagIndex}
           />
         </div>
       </div>

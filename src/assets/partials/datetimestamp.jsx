@@ -11,7 +11,7 @@ export default function DatetimeStamp({ active, startDate, endDate }) {
                     
                     <div className="w-0 h-0 border-l-4 border-r-4 border-b-4 border-l-transparent border-r-transparent border-b-gray-200 -mt-2"></div>
                     
-                    <div className="flex  w-full h-full rounded-xl transparent border border-gray-200 items-center justify-center">
+                    <div className="flex  w-full h-full rounded-xl transparent border border-gray-600 items-center justify-center">
                         <div className='text-[12px] font-semibold'>
                          <p>{`${startDate} - ${endDate}`} </p>
                         </div>
