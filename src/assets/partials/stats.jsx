@@ -1,70 +1,68 @@
 import React from 'react';
 import {
-  BarChart,
-  Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip as BarTooltip,
+  Tooltip,
   Legend,
-  PieChart,
-  Pie,
-  Tooltip as PieTooltip
 } from 'recharts';
 
 // Import the JSON response data
 // Adjust the import path as needed if your response.json is in your project.
 import responseData from './response.json';
 
-const StatsChart = () => {
-  // Define the image we want to focus on.
-  const selectedImageName = "satlas_amazon_2024-07-01-2024-07-31_6";
-  
-  // Look for the statistics corresponding to the selected image.
-  const selectedStats = responseData.statistics.find(
-    (item) => item.image_name === selectedImageName
-  );
-  
-  if (!selectedStats) {
-    return <div>No data available for image: {selectedImageName}</div>;
-  }
-  
-  // Extract NDMI statistics for both background and forest
-  const { NDMI: bgNDMI } = selectedStats.stats.background;
-  const { NDMI: forestNDMI } = selectedStats.stats.forest;
-  
-  // Create an array for the bar chart comparing NDMI stats.
-  const statKeys = ["min", "max", "mean", "median", "std"];
-  const ndmiCombinedData = statKeys.map(key => ({
-    stat: key,
-    Background: bgNDMI[key],
-    Forest: forestNDMI[key]
-  }));
-  
-  // Prepare data for the pie chart from the class percentages.
-  const classData = [
-    { name: 'Background', value: selectedStats.stats.background.class_percentage },
-    { name: 'Forest', value: selectedStats.stats.forest.class_percentage }
-  ];
-  
+const StatsChart = ({ data }) => {
+  // Calculate average of all metrics for each time interval
+  const chartData = data?.map(item => {
+    const metrics = item.stats;
+    const allValues = [];
+    
+    // Collect all metric values
+    Object.values(metrics).forEach(category => {
+      Object.values(category).forEach(metric => {
+        if (typeof metric === 'object' && metric !== null) {
+          allValues.push(metric.mean);
+        }
+      });
+    });
+    
+    // Calculate average of all metrics
+    const average = allValues.reduce((sum, val) => sum + val, 0) / allValues.length;
+    
+    return {
+      time_interval: item.time_interval,
+      average: average
+    };
+  });
+
   return (
     <div style={{ textAlign: 'center' }}>
-      <h2>NDMI Statistics Comparison</h2>
-      <BarChart
+      <h2>Average Metrics Over Time</h2>
+      <LineChart
         width={600}
         height={300}
-        data={ndmiCombinedData}
+        data={chartData}
         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="stat" />
-        <YAxis />
-        <BarTooltip />
+        <XAxis 
+          dataKey="time_interval" 
+          label={{ value: 'Time Interval', position: 'insideBottom', offset: -5 }}
+        />
+        <YAxis 
+          label={{ value: 'Average Metric Value', angle: -90, position: 'insideLeft' }}
+        />
+        <Tooltip />
         <Legend />
-        <Bar dataKey="Background" fill="#808080" />
-        <Bar dataKey="Forest" fill="#008000" />
-      </BarChart>
-      
+        <Line 
+          type="monotone" 
+          dataKey="average" 
+          stroke="#008000" 
+          activeDot={{ r: 8 }} 
+        />
+      </LineChart>
     </div>
   );
 };

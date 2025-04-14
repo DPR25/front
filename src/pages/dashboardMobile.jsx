@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Earth from '../assets/partials/EarthMobile';
+import Earth from '../assets/partials/Earth';
 import ModelSelector from '../assets/partials/modelselector';
 import VisualizeMobile from '../assets/partials/visualizeMobile';
 
