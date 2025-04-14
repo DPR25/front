@@ -108,7 +108,7 @@ export default function DashboardMobile() {
       </div>
 
       {/* Earth Component */}
-      <div className="w-full h-[400px] mb-3 bg-[#1b1c1d] rounded-xl overflow-hidden">
+      <div className="w-full h-[400px] mb-3 bg-[#1b1c1d] rounded-xl overflow-hidden items-center">
         <Earth lat={lat} long={long} />
       </div>
 

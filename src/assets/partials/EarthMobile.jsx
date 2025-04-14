@@ -54,31 +54,46 @@ export default function Earth({lat, long}) {
   }, [location.pathname]);
 
   return (
-    <div style={{ width: '600px', height: '600px' }}>
-      <Globe
-        ref={globeRef}
-        globeImageUrl="https://unpkg.com/three-globe@2.31.0/example/img/earth-blue-marble.jpg"
-        bumpImageUrl="https://unpkg.com/three-globe@2.31.0/example/img/earth-topology.png"
-        backgroundColor="rgba(0,0,0,0)"
-        showAtmosphere={true}
-        pointsData={points}
-        pointLat="lat"
-        pointLng="lng"
-        pointColor={(d) => `rgba(149, 255, 43, ${d.opacity})`}
-        pointRadius={(d) => d.size}
-        pointLabel="name"
-        pointAltitude={0.01}
-        pointResolution={64}
-        pointsMerge={false}
-        pointsTransitionDuration={0}
-        width={600}
-        height={600}
-        onGlobeReady={() => {
-          const globe = globeRef.current;
-          const controls = globe.controls();
-          controls.autoRotate = false; // Disable auto-rotation for spin animation
-        }}
-      />
+    <div style={{ 
+      width: '100%', 
+      height: '100%',
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center',
+      position: 'relative'
+    }}>
+      <div style={{ 
+        width: '350px', 
+        height: '350px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <Globe
+          ref={globeRef}
+          globeImageUrl="https://unpkg.com/three-globe@2.31.0/example/img/earth-blue-marble.jpg"
+          bumpImageUrl="https://unpkg.com/three-globe@2.31.0/example/img/earth-topology.png"
+          backgroundColor="rgba(0,0,0,0)"
+          showAtmosphere={true}
+          pointsData={points}
+          pointLat="lat"
+          pointLng="lng"
+          pointColor={(d) => `rgba(149, 255, 43, ${d.opacity})`}
+          pointRadius={(d) => d.size}
+          pointLabel="name"
+          pointAltitude={0.01}
+          pointResolution={64}
+          pointsMerge={false}
+          pointsTransitionDuration={0}
+          width={350}
+          height={350}
+          onGlobeReady={() => {
+            const globe = globeRef.current;
+            const controls = globe.controls();
+            controls.autoRotate = false; // Disable auto-rotation for spin animation
+          }}
+        />
+      </div>
     </div>
   );
 }
