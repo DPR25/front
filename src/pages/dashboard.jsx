@@ -137,8 +137,9 @@ export default function Dashboard() {
         </button>
       </div>
 
-        <div className="h-full flex justify-center items-center">
+        <div className="h-full flex justify-center items-center ">
 
+        
           <Visualize
             jobID={id}
             orderedData={orderedDataWithClouds}
@@ -150,7 +151,9 @@ export default function Dashboard() {
             tagIndex={tagIndex}
             setTagIndex={setTagIndex}
           />
+
         </div>
+
       </div>
 
       <div className="w-1/2 flex flex-col items-center gap-15">
@@ -164,7 +167,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="overflow-hidden h-85 w-2/3 p-">
+        <div className="overflow-hidden h-90 w-2/3 p-">
             <p>{locationName}</p>
           <ModelSelector
             activeIndex={segModelActiveIndex}
