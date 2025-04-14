@@ -38,6 +38,7 @@ export default function Stats({ statistics, classLegend }) {
       return acc;
     }, {})
   );
+
   // Function to convert RGB array to rgba string
   const rgbToRgba = (rgbArray, alpha = 1) => {
     if (!rgbArray || !Array.isArray(rgbArray) || rgbArray.length !== 3) {
@@ -73,133 +74,171 @@ export default function Stats({ statistics, classLegend }) {
       // Add class coverage datasets for all classes
       Object.entries(classLegend).forEach(([className, color]) => {
         if (selectedClassCoverage[className]) {
-          datasets.push({
-            label: `${className} Percentage`,
-            data: sortedStats.map(stat => {
-              // Check if the class exists in the stats
-              if (!stat.stats[className]) {
-                console.warn(`Class ${className} not found in stats:`, stat);
-                return 0;
-              }
-              return stat.stats[className].class_percentage;
-            }),
-            borderColor: rgbToRgba(color, 0.8),
-            backgroundColor: rgbToRgba(color, 0.8),
-            tension: 0.4,
-            fill: true,
+          const data = sortedStats.map(stat => {
+            // Check if the class exists in the stats
+            if (!stat.stats || !stat.stats[className]) {
+              console.warn(`Class ${className} not found in stats:`, stat);
+              return 0;
+            }
+            return stat.stats[className].class_percentage || 0;
           });
+
+          // Use the color from classLegend directly
+          const backgroundColor = rgbToRgba(color);
+          const borderColor = rgbToRgba(color);
+
+          // Only add dataset if there's at least one non-zero value
+          if (data.some(value => value > 0)) {
+            datasets.push({
+              label: `${className} Percentage`,
+              data,
+              borderColor,
+              backgroundColor,
+              tension: 0.4,
+              fill: true,
+            });
+          }
         }
       });
 
       // Add total cloud coverage dataset
       if (selectedMetrics.cloud) {
-        datasets.push({
-          label: 'Total Cloud Coverage',
-          data: sortedStats.map(stat => {
-            // Check if cloud_coverage exists in the stats
-            if (stat.stats.cloud_coverage === undefined) {
-              console.warn('Cloud coverage not found in stats:', stat);
-              return 0;
-            }
-            return stat.stats.cloud_coverage;
-          }),
-          borderColor: 'rgb(156, 163, 175)', // Gray
-          backgroundColor: 'rgb(156, 163, 175)',
-          tension: 0.4,
-          fill: true,
+        const cloudData = sortedStats.map(stat => {
+          // Check if cloud_coverage exists in the stats
+          if (!stat.stats || stat.stats.cloud_coverage === undefined) {
+            console.warn('Cloud coverage not found in stats:', stat);
+            return 0;
+          }
+          return stat.stats.cloud_coverage || 0;
         });
+
+        // Only add dataset if there's at least one non-zero value
+        if (cloudData.some(value => value > 0)) {
+          datasets.push({
+            label: 'Total Cloud Coverage',
+            data: cloudData,
+            borderColor: 'rgb(156, 163, 175)', // Gray
+            backgroundColor: 'rgb(156, 163, 175)',
+            tension: 0.4,
+            fill: true,
+          });
+        }
       }
     } else {
       // Add metrics for the selected class
       const className = selectedTab;
+      
+      // Check if the class exists in any of the stats
+      const hasClassData = sortedStats.some(stat => 
+        stat.stats && stat.stats[className]
+      );
+
+      if (!hasClassData) {
+        console.warn(`No data found for class: ${className}`);
+        return {
+          labels,
+          datasets: [],
+        };
+      }
+
       if (selectedMetrics.ndvi) {
-        datasets.push({
-          label: 'NDVI',
-          data: sortedStats.map(stat => {
-            // Check if the class and NDVI exist in the stats
-            if (!stat.stats[className] || !stat.stats[className].NDVI) {
-              console.warn(`Class ${className} or NDVI not found in stats:`, stat);
-              return 0;
-            }
-            return stat.stats[className].NDVI.mean;
-          }),
-          borderColor: 'rgb(34, 197, 94)', // Green
-          backgroundColor: 'rgb(34, 197, 94)',
-          tension: 0.4,
-          fill: true,
+        const ndviData = sortedStats.map(stat => {
+          if (!stat.stats || !stat.stats[className] || !stat.stats[className].NDVI) {
+            return 0;
+          }
+          return stat.stats[className].NDVI.mean || 0;
         });
+
+        if (ndviData.some(value => value > 0)) {
+          datasets.push({
+            label: 'NDVI',
+            data: ndviData,
+            borderColor: 'rgb(34, 197, 94)', // Green
+            backgroundColor: 'rgb(34, 197, 94)',
+            tension: 0.4,
+            fill: true,
+          });
+        }
       }
 
       if (selectedMetrics.ndwi) {
-        datasets.push({
-          label: 'NDWI',
-          data: sortedStats.map(stat => {
-            // Check if the class and NDWI exist in the stats
-            if (!stat.stats[className] || !stat.stats[className].NDWI) {
-              console.warn(`Class ${className} or NDWI not found in stats:`, stat);
-              return 0;
-            }
-            return stat.stats[className].NDWI.mean;
-          }),
-          borderColor: 'rgb(59, 130, 246)', // Blue
-          backgroundColor: 'rgb(59, 130, 246)',
-          tension: 0.4,
-          fill: true,
+        const ndwiData = sortedStats.map(stat => {
+          if (!stat.stats || !stat.stats[className] || !stat.stats[className].NDWI) {
+            return 0;
+          }
+          return stat.stats[className].NDWI.mean || 0;
         });
+
+        if (ndwiData.some(value => value > 0)) {
+          datasets.push({
+            label: 'NDWI',
+            data: ndwiData,
+            borderColor: 'rgb(59, 130, 246)', // Blue
+            backgroundColor: 'rgb(59, 130, 246)',
+            tension: 0.4,
+            fill: true,
+          });
+        }
       }
 
       if (selectedMetrics.ndsi) {
-        datasets.push({
-          label: 'NDSI',
-          data: sortedStats.map(stat => {
-            // Check if the class and NDSI exist in the stats
-            if (!stat.stats[className] || !stat.stats[className].NDSI) {
-              console.warn(`Class ${className} or NDSI not found in stats:`, stat);
-              return 0;
-            }
-            return stat.stats[className].NDSI.mean;
-          }),
-          borderColor: 'rgb(139, 69, 19)', // Brown
-          backgroundColor: 'rgb(139, 69, 19)',
-          tension: 0.4,
-          fill: true,
+        const ndsiData = sortedStats.map(stat => {
+          if (!stat.stats || !stat.stats[className] || !stat.stats[className].NDSI) {
+            return 0;
+          }
+          return stat.stats[className].NDSI.mean || 0;
         });
+
+        if (ndsiData.some(value => value > 0)) {
+          datasets.push({
+            label: 'NDSI',
+            data: ndsiData,
+            borderColor: 'rgb(139, 69, 19)', // Brown
+            backgroundColor: 'rgb(139, 69, 19)',
+            tension: 0.4,
+            fill: true,
+          });
+        }
       }
 
       if (selectedMetrics.ndmi) {
-        datasets.push({
-          label: 'NDMI',
-          data: sortedStats.map(stat => {
-            // Check if the class and NDMI exist in the stats
-            if (!stat.stats[className] || !stat.stats[className].NDMI) {
-              console.warn(`Class ${className} or NDMI not found in stats:`, stat);
-              return 0;
-            }
-            return stat.stats[className].NDMI.mean;
-          }),
-          borderColor: 'rgb(147, 51, 234)', // Purple
-          backgroundColor: 'rgb(147, 51, 234)',
-          tension: 0.4,
-          fill: true,
+        const ndmiData = sortedStats.map(stat => {
+          if (!stat.stats || !stat.stats[className] || !stat.stats[className].NDMI) {
+            return 0;
+          }
+          return stat.stats[className].NDMI.mean || 0;
         });
+
+        if (ndmiData.some(value => value > 0)) {
+          datasets.push({
+            label: 'NDMI',
+            data: ndmiData,
+            borderColor: 'rgb(147, 51, 234)', // Purple
+            backgroundColor: 'rgb(147, 51, 234)',
+            tension: 0.4,
+            fill: true,
+          });
+        }
       }
 
       if (selectedMetrics.cloud) {
-        datasets.push({
-          label: 'Cloud Coverage',
-          data: sortedStats.map(stat => {
-            // Check if the class and class_cloud_coverage exist in the stats
-            if (!stat.stats[className] || stat.stats[className].class_cloud_coverage === undefined) {
-              console.warn(`Class ${className} or class_cloud_coverage not found in stats:`, stat);
-              return 0;
-            }
-            return stat.stats[className].class_cloud_coverage;
-          }),
-          borderColor: 'rgb(156, 163, 175)', // Gray
-          backgroundColor: 'rgb(156, 163, 175)',
-          tension: 0.4,
-          fill: true,
+        const cloudData = sortedStats.map(stat => {
+          if (!stat.stats || !stat.stats[className] || stat.stats[className].class_cloud_coverage === undefined) {
+            return 0;
+          }
+          return stat.stats[className].class_cloud_coverage || 0;
         });
+
+        if (cloudData.some(value => value > 0)) {
+          datasets.push({
+            label: 'Cloud Coverage',
+            data: cloudData,
+            borderColor: 'rgb(156, 163, 175)', // Gray
+            backgroundColor: 'rgb(156, 163, 175)',
+            tension: 0.4,
+            fill: true,
+          });
+        }
       }
     }
 
@@ -248,180 +287,130 @@ export default function Stats({ statistics, classLegend }) {
     scales: {
       y: {
         beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Value',
-          color: 'white',
-          font: {
-            color: 'white'
-          }
-        },
         ticks: {
-          color: 'white',
-          font: {
-            color: 'white'
-          }
+          color: 'white'
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
-        },
+          color: 'rgba(255, 255, 255, 0.1)'
+        }
       },
       x: {
-        title: {
-          display: true,
-          text: 'Time Interval',
-          color: 'white',
-          font: {
-            color: 'white'
-          }
-        },
         ticks: {
-          maxRotation: 45,
-          minRotation: 45,
-          color: 'white',
-          font: {
-            color: 'white'
-          }
+          color: 'white'
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
-        },
-      },
-    },
+          color: 'rgba(255, 255, 255, 0.1)'
+        }
+      }
+    }
   };
 
   const toggleMetric = (metric) => {
     setSelectedMetrics(prev => ({
       ...prev,
-      [metric]: !prev[metric],
+      [metric]: !prev[metric]
     }));
   };
 
   const toggleClassCoverage = (className) => {
     setSelectedClassCoverage(prev => ({
       ...prev,
-      [className]: !prev[className],
+      [className]: !prev[className]
     }));
   };
 
   return (
-    <div className="w-full h-full flex flex-col pt-4">
+    <div className="p-4">
       <div className="flex flex-wrap gap-2 mb-4">
         <button
-          onClick={() => setSelectedTab('All')}
           className={`px-3 py-1 rounded ${
-            selectedTab === 'All'
-              ? 'bg-blue-500 text-white'
-              : 'bg-gray-200 text-gray-700'
-          }`}
+            selectedTab === 'All' ? 'bg-blue-500' : 'bg-gray-600'
+          } text-white`}
+          onClick={() => setSelectedTab('All')}
         >
-          All
+          All Classes
         </button>
-        {Object.entries(classLegend).map(([className, color]) => (
+        {Object.keys(classLegend || {}).map(className => (
           <button
             key={className}
-            onClick={() => setSelectedTab(className)}
             className={`px-3 py-1 rounded ${
-              selectedTab === className
-                ? 'text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-            style={selectedTab === className ? { backgroundColor: rgbToRgba(color) } : {}}
+              selectedTab === className ? 'bg-blue-500' : 'bg-gray-600'
+            } text-white`}
+            onClick={() => setSelectedTab(className)}
           >
             {className}
           </button>
         ))}
       </div>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {selectedTab === 'All' ? (
-          <>
-            {Object.entries(classLegend).map(([className, color]) => (
-              <button
-                key={className}
-                onClick={() => toggleClassCoverage(className)}
-                className={`px-3 py-1 rounded ${
-                  selectedClassCoverage[className]
-                    ? `text-white` 
-                    : 'bg-gray-200 text-gray-700'
-                }`}
-                style={selectedClassCoverage[className] ? { backgroundColor: rgbToRgba(color) } : {}}
-              >
-                {className} Coverage
-              </button>
-            ))}
+
+      {selectedTab === 'All' ? (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {Object.entries(classLegend || {}).map(([className, color]) => (
             <button
-              onClick={() => toggleMetric('cloud')}
+              key={className}
               className={`px-3 py-1 rounded ${
-                selectedMetrics.cloud
-                  ? 'bg-gray-500 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
+                selectedClassCoverage[className] ? 'bg-opacity-80' : 'bg-opacity-20'
+              } text-white`}
+              style={{
+                backgroundColor: rgbToRgba(color, selectedClassCoverage[className] ? 0.8 : 0.2)
+              }}
+              onClick={() => toggleClassCoverage(className)}
             >
-              Cloud Coverage
+              {className}
             </button>
-          </>
-        ) : (
-          <>
-            <button
-              onClick={() => toggleMetric('ndvi')}
-              className={`px-3 py-1 rounded ${
-                selectedMetrics.ndvi
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              NDVI
-            </button>
-            <button
-              onClick={() => toggleMetric('ndwi')}
-              className={`px-3 py-1 rounded ${
-                selectedMetrics.ndwi
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              NDWI
-            </button>
-            <button
-              onClick={() => toggleMetric('ndsi')}
-              className={`px-3 py-1 rounded ${
-                selectedMetrics.ndsi
-                  ? 'text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-              style={selectedMetrics.ndsi ? { backgroundColor: 'rgb(139, 69, 19)' } : {}}
-            >
-              NDSI
-            </button>
-            <button
-              onClick={() => toggleMetric('ndmi')}
-              className={`px-3 py-1 rounded ${
-                selectedMetrics.ndmi
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              NDMI
-            </button>
-            <button
-              onClick={() => toggleMetric('cloud')}
-              className={`px-3 py-1 rounded ${
-                selectedMetrics.cloud
-                  ? 'bg-gray-500 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              Cloud Coverage
-            </button>
-          </>
-        )}
-      </div>
-      <div className="flex-1">
-        {chartData ? (
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-2 mb-4">
+          <button
+            className={`px-3 py-1 rounded ${
+              selectedMetrics.ndvi ? 'bg-green-500' : 'bg-gray-600'
+            } text-white`}
+            onClick={() => toggleMetric('ndvi')}
+          >
+            NDVI
+          </button>
+          <button
+            className={`px-3 py-1 rounded ${
+              selectedMetrics.ndwi ? 'bg-blue-500' : 'bg-gray-600'
+            } text-white`}
+            onClick={() => toggleMetric('ndwi')}
+          >
+            NDWI
+          </button>
+          <button
+            className={`px-3 py-1 rounded ${
+              selectedMetrics.ndsi ? 'bg-brown-500' : 'bg-gray-600'
+            } text-white`}
+            onClick={() => toggleMetric('ndsi')}
+          >
+            NDSI
+          </button>
+          <button
+            className={`px-3 py-1 rounded ${
+              selectedMetrics.ndmi ? 'bg-purple-500' : 'bg-gray-600'
+            } text-white`}
+            onClick={() => toggleMetric('ndmi')}
+          >
+            NDMI
+          </button>
+          <button
+            className={`px-3 py-1 rounded ${
+              selectedMetrics.cloud ? 'bg-gray-500' : 'bg-gray-600'
+            } text-white`}
+            onClick={() => toggleMetric('cloud')}
+          >
+            Cloud Coverage
+          </button>
+        </div>
+      )}
+
+      <div className="h-96">
+        {chartData && chartData.datasets.length > 0 ? (
           <Line data={chartData} options={options} />
         ) : (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-gray-500">No data available</p>
+          <div className="flex items-center justify-center h-full text-white">
+            No data available for the selected options
           </div>
         )}
       </div>
