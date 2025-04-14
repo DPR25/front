@@ -1,7 +1,6 @@
-// ModelSelector.jsx
 import React, { useState, useEffect } from 'react';
-import ModelCard from './modelcard'; // Fixed case to match typical naming convention
-import './modelselector.css'; // Import your CSS file
+import ModelCard from './modelcard'; 
+import './modelselector.css'; 
 
 const ModelSelector = ({activeIndex, setActiveIndex}) => {
   const [models, setModels] = useState(null);
@@ -40,7 +39,6 @@ const ModelSelector = ({activeIndex, setActiveIndex}) => {
     return <div className="p-5">Loading...</div>;
   }
 
-  // Convert models object to array to use index for active state
   const modelEntries = Object.entries(models);
 
   return (
@@ -57,7 +55,7 @@ const ModelSelector = ({activeIndex, setActiveIndex}) => {
               key={key}
               className={`p-5 modelcard w-[250px] rounded-xl border h-65 ${activeIndex === index ? 'modelcard-active' : ''}`}
 
-              onClick={() => setActiveIndex(index)} // Update active index on click
+              onClick={() => setActiveIndex(index)} 
             >
               <ModelCard
                 modelName={model.name}

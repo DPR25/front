@@ -2,7 +2,6 @@ import {React} from 'react'
 import Landing from './src/pages/landing'
 import Dashboard from './src/pages/dashboard'
 import Map from './src/pages/map'
-import Earth from './src/pages/earth'
 import {Route, Routes} from 'react-router-dom'
 
 export default function App() {

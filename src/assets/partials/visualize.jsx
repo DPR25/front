@@ -1,88 +1,94 @@
-import React, {useEffect, useState} from 'react'
-import Card from './card'
+import React, { useState } from 'react';
+import Card from './card';
+import DatetimeStamp from './datetimestamp';
+import ToggleBtn from './togglebtn';
 
+export default function Visualize({
+  orderedData,
+  activeIndex,
+  setActiveIndex,
+  loading,
+  error,
+}) {
+  const [isToggled, setIsToggled] = useState(false);
 
-export default function Visualize({jobID}) {
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!orderedData || orderedData.length === 0) return <div>No data available</div>;
 
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [orderedData, setOrderedData] = useState(null)
-  
+  return (
+    <div className="w-full h-full flex flex-col justify-center items-center border-1 border-[#494c50] rounded-4xl bg-[#1b1c1d] p-10">
+      <div className="w-full h-[95%] flex justify-center items-center gap-20">
+        <button
+          onClick={() => {
+            if (activeIndex >= 1) setActiveIndex(activeIndex - 1);
+          }}
+        >
+          <div
+            className={`w-30 h-25 flex justify-center items-center hover:bg-[#343a42]
+            hover:cursor-pointer active:bg-[#24282e] rounded-2xl ${
+              activeIndex === 0 ? 'pointer-events-none cursor-not-allowed' : ''
+            }`}
+          >
+            <img src="/arrow_left.svg" alt="" width={60} />
+          </div>
+        </button>
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-          try {
-            const response = await fetch(`/api/locations/${jobID}`);
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            setPosts(data);
-            setOrderedData(mapImageUrlsReverse(data.image_sources || []));
-          } catch (err) {
-            setError(err.message);
-          } finally {
-            setLoading(false);
-          }
-        };
-      
-        fetchPosts();
-      }, [jobID]);
+        <Card
+          img_path={orderedData[activeIndex].imagePath}
+          mask_path={orderedData[activeIndex].maskPath}
+          orderSwitch={isToggled}
+        />
 
-      const mapImageUrlsReverse = (urls) => {
-        const mapped = [];
-        for (let i = urls.length - 2; i >= 0; i -= 2) {
-          const imageUrl = urls[i];
-          const maskUrl = urls[i + 1];
-    
-          const match = imageUrl.match(/satlas_rgb2_(\d{4}-\d{2}-\d{2})-(\d{4}-\d{2}-\d{2})_(\d)_image\.png$/);
-          if (match) {
-            const startDate = match[1];
-            const endDate = match[2];
-            const seriesIndex = parseInt(match[3], 10);
-    
-            mapped.push({
-              series_index: seriesIndex,
-              imagePath: imageUrl,
-              maskPath: maskUrl,
-              startDate,
-              endDate,
-            });
-          }
-        }
-        return mapped;
-      };
+        <button
+          onClick={() => {
+            if (activeIndex < orderedData.length - 1)
+              setActiveIndex(activeIndex + 1);
+          }}
+        >
+          <div
+            className={`w-30 h-25 flex justify-center items-center hover:bg-[#343a42]
+            hover:cursor-pointer active:bg-[#24282e] rounded-2xl ${
+              activeIndex === orderedData.length - 1
+                ? 'pointer-events-none cursor-not-allowed'
+                : ''
+            }`}
+          >
+            <img src="/arrow_right.svg" alt="" width={60} />
+          </div>
+        </button>
+      </div>
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-    
+      <div className="flex w-full justify-between items-center px-5">
+        <div className="w-1/2 flex items-center justify-center">
+          <div className="w-1/2 font-semibold">
+            <p>Timestamp</p>
+          </div>
 
-    return (
-       
-            <div className='w-full h-full flex justify-center items-center gap-20'>
-            
-            <button>
-              <div className='w-30 h-25 flex justify-center items-center hover:bg-[#343a42]
-              hover:cursor-pointer active:bg-[#24282e] rounded-2xl'>
-                <img src="/arrow_left.svg" alt="" width={60}/>
-              </div>
-            </button>
+          <div className="w-1/2 flex gap-2">
+            {orderedData.map((data, index) => (
+              <DatetimeStamp
+                key={index}
+                active={index === activeIndex}
+                startDate={data.startDate}
+                endDate={data.endDate}
+              />
+            ))}
+          </div>
+        </div>
 
-            <Card
-            img_path={orderedData[0].imagePath}
-            mask_path={orderedData[0].maskPath}
-            orderSwitch={0}
-            />
-
-            <button>
-              <div className='w-30 h-25 flex justify-center items-center hover:bg-[#343a42]
-              hover:cursor-pointer active:bg-[#24282e] rounded-2xl'>
-                <img src="/arrow_right.svg" alt="" width={60}/>
-              </div>
-            </button>
-             
-            </div>
-      
-    )
+        <div className="flex w-1/4 items-center justify-center">
+          <div className="w-40 font-semibold">
+            <p>View : {`${isToggled ? 'Image' : 'Mask'}`}</p>
+          </div>
+          <ToggleBtn
+            isToggled={isToggled}
+            onToggle={() => {
+              setIsToggled(!isToggled);
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
 }
