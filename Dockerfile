@@ -8,9 +8,7 @@ RUN npm install
 
 RUN npm i -g serve
 
-COPY . .
-
-RUN npm run build
+COPY dist /app/dist
 
 EXPOSE 3000
 
