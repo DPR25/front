@@ -12,8 +12,8 @@ function Landing() {
         <div className={`absolute flex items-center justify-center top-0 left-0 w-screen h-screen z-0 ${dimmed ? 'dimmed' : 'opacity-0'}`}>
             <div className='glass w-[90%] sm:w-[500px] h-[300px] flex flex-col items-center gap-4 sm:gap-6 border border-teal-300 bg-black rounded-2xl py-6 sm:py-10'>
                 <h1 className='text-gray-200 text-xl sm:text-2xl font-semibold'>Sign In</h1>
-                <input type="text" className="w-[80%] p-2 font-semibold bg-gray-100 text-gray-900 border rounded-md border-none outline-none focus:outline-none focus:ring-0 focus:border-none" placeholder="Username" />
-                <input type="password" className="w-[80%] p-2 font-semibold bg-gray-100 text-gray-900 border rounded-md border-none outline-none focus:outline-none focus:ring-0 focus:border-none" placeholder="Password" />
+                <input type="text" className="w-[80%] p-2 font-semibold bg-gray-100 text-gray-900 border rounded-md border-none outline-none focus:outline-none focus:ring-0 focus:border-none" placeholder="Username" value="user" />
+                <input type="password" className="w-[80%] p-2 font-semibold bg-gray-100 text-gray-900 border rounded-md border-none outline-none focus:outline-none focus:ring-0 focus:border-none" placeholder="Password" value="pass" />
                 <Link
                     to='/dashboard/133f5bfe-6b8b-49a4-bcb8-9dc289307b54'
                     className="mt-auto w-[50%] py-2 hover:cursor-pointer border- text-xl 
