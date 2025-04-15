@@ -7,7 +7,7 @@ function Landing() {
     const [dimmed, setDimmed] = useState(false)
 
     return <>
-    <div className='landing relative flex justify-center w-full h-dvh gap-4 p-5 z-0'>
+    <div className='landing relative flex justify-center w-full h-screen gap-4 p-5 z-0'>
         {/* Sign In Modal */}
         <div className={`absolute flex items-center justify-center top-0 left-0 w-screen h-screen z-0 ${dimmed ? 'dimmed' : 'opacity-0'}`}>
             <div className='glass w-[90%] sm:w-[500px] h-[300px] flex flex-col items-center gap-4 sm:gap-6 border border-teal-300 bg-black rounded-2xl py-6 sm:py-10'>
