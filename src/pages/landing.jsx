@@ -45,7 +45,7 @@ function Landing() {
         </div>
 
         {/* Main Content */}
-        <div className='absolute top-[30vh] sm:top-[40vh] w-[90%] sm:w-[50vw] min-w-0 sm:min-w-[800px] h-auto flex flex-col sm:flex-row justify-center items-center gap-4'>
+        <div className='absolute top-[30vh] sm:top-[40vh] w-[90%] sm:w-[50vw] min-w-0 sm:min-w-[800px] h-screen overflow-auto flex flex-col sm:flex-row justify-center items-center gap-4'>
             {/* Left Column */}
             <div className='flex flex-col gap-4 w-full sm:w-auto'>
                 <div className='glass relative w-full sm:w-[400px] h-[28vh] slide-animate0 overflow-hidden'>
