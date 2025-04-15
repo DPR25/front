@@ -1,7 +1,7 @@
 FROM node:20-alpine
 
 WORKDIR /app
-
+ADD https://www.google.com /time.now
 COPY package.json .
 
 RUN npm install
