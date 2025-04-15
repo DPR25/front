@@ -9,7 +9,7 @@ export default defineConfig({
     allowedHosts: ['.dprserver.me'],
   },
   server: {
-    allowedHosts: ['..dprserver.me'],
+    allowedHosts: ['*'],
     proxy: {
       '/api': {
         target: 'https://dprserver.me',
