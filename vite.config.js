@@ -1,17 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from 'tailwindcss' // corrected import
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  preview: {
-    host: true,
-    port: 5173,
-    allowedHosts: ['app.dprserver.me'],
-  },
+  plugins: [react()],
   server: {
-    allowedHosts: ['*'],
+    host: '0.0.0.0', // 👈 makes Vite accessible from outside (Docker, etc.)
+    port: 5173,
+    strictPort: true,
+    hmr: {
+      host: 'app.dprserver.me', // 👈 ensures hot reload works with this domain
+    },
     proxy: {
       '/api': {
         target: 'https://dprserver.me',
@@ -25,5 +24,6 @@ export default defineConfig({
       },
     },
   },
-});
+})
+
 
