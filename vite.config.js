@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   preview: {
-    allowedHosts: ['.dprserver.me'],
+    allowedHosts: ['app.dprserver.me'],
   },
   server: {
     allowedHosts: ['*'],
