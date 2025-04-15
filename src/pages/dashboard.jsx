@@ -170,7 +170,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="w-1/2 flex flex-col items-center gap-15">
+        <div className="w-1/2 flex h-full flex-col items-center gap-15">
           <div className="w-full h-1/2 flex justify-center">
             <div className="">
               <Earth 
@@ -181,7 +181,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="overflow-hidden h-90 w-2/3 p-">
+          <div className="overflow-hidden h-“05 w-2/3 p-">
             <p>{locationName}</p>
             <ModelSelector
               activeIndex={segModelActiveIndex}

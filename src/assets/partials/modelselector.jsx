@@ -53,7 +53,7 @@ const ModelSelector = ({activeIndex, setActiveIndex}) => {
           {modelEntries.map(([key, model], index) => (
             <div
               key={key}
-              className={`p-5 modelcard w-[250px] rounded-xl border h-65 ${activeIndex === index ? 'modelcard-active' : ''}`}
+              className={`p-5 modelcard w-[250px] rounded-xl border h-75 ${activeIndex === index ? 'modelcard-active' : ''}`}
 
               onClick={() => setActiveIndex(index)} 
             >
