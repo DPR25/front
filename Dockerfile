@@ -1,13 +1,7 @@
-FROM node:20-alpine
-
-WORKDIR /app
+FROM nginx:alpine
 ADD https://www.google.com /time.now
-COPY package.json .
+WORKDIR /usr/share/nginx/html
+COPY dist /usr/share/nginx/html
+EXPOSE 80
 
-RUN npm install
-
-COPY dist /app/dist
-
-EXPOSE 3000
-
-CMD [ "npm", "run", "preview"  ]
+CMD ["nginx", "-g", "daemon off;"]
