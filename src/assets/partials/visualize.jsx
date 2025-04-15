@@ -91,7 +91,7 @@ export default function Visualize({
 
               <div className='flex w-full justify-between pr-10 font-semibold'>
                 <img src="/cloud.svg" alt="" width={30}/>
-                <p>{orderedData[activeIndex].cloudCoverage.toFixed(2)} %</p>
+                <p>{(orderedData[activeIndex].cloudCoverage * 100).toFixed(2)} %</p>
               </div>
 
               <div className='flex h-full flex-col'>
